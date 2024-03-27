@@ -20,9 +20,9 @@
             <div class="box-item">
               <div>店铺状态：{{ userData.storeDisable == 'OPEN' ? '开启中' : '关闭' }}</div>
             </div>
-            <div class="box-item" @click="im()">
+            <!-- <div class="box-item" @click="im()">
               <Button type="info" :loading='load'>点击登录客服</Button>
-            </div>
+            </div> -->
           </div>
 
           <div class="rate-box">
@@ -31,7 +31,7 @@
                 :percent="(userData.serviceScore * 20)" stroke-linecap="square">
                 <div class="demo-Circle-custom">
 
-                  <p class="bold">{{ userData.serviceScore }}分</p>
+                  <p class="bold">{{ userData.serviceScore || 0 }}分</p>
                 </div>
               </i-circle>
               <h5>服务得分</h5>
@@ -41,7 +41,7 @@
                 :percent="(userData.deliveryScore * 20)" stroke-linecap="square">
                 <div>
 
-                  <p class="bold">{{ userData.deliveryScore }}分</p>
+                  <p class="bold">{{ userData.deliveryScore || 0 }}分</p>
                 </div>
               </i-circle>
               <h5>交货得分</h5>
@@ -50,7 +50,7 @@
               <i-circle :size="120" stroke-color="#848ccf" :trail-width="4" :stroke-width="5"
                 :percent="(userData.descriptionScore * 20)" stroke-linecap="square">
                 <div>
-                  <p class="bold">{{ userData.descriptionScore }}分</p>
+                  <p class="bold">{{ userData.descriptionScore || 0 }}分</p>
                 </div>
               </i-circle>
               <h5>评价得分</h5>
@@ -236,6 +236,7 @@ export default {
     async init () {
       let userInfo = JSON.parse(Cookies.get("userInfoSeller"));
 
+      console.log(userInfo)
       this.userData = userInfo;
 
       let res = await getHomeNotice();
