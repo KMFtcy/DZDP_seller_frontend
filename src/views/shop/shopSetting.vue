@@ -34,7 +34,7 @@
             </Form-item>
           </Form>
         </TabPane>
-        <TabPane label="发货地址">
+        <!-- <TabPane label="发货地址">
           <Form ref="addressGoods" :model="addressGoods" :label-width="100" :rules="addressGoodsValidate">
             <FormItem label="发货人姓名" prop="salesConsignorName">
               <Input v-model="addressGoods.salesConsignorName" maxlength="11" clearable style="width: 20%">
@@ -48,14 +48,6 @@
               <span>{{ addressGoods.salesConsignorAddressPath }}</span>
               <Button style="margin-left: 10px;" @click="handleChangeAddress('addressGoods')">选择</Button>
             </FormItem>
-            <!-- <FormItem label="地址名称" prop="salesConsignorAddressPath">
-              <Input
-                v-model="addressGoods.salesConsignorAddressPath"
-                clearable
-                style="width: 20%"
-              >
-              </Input>
-            </FormItem> -->
             <FormItem label="详细地址" prop="salesConsignorDetail">
               <Input v-model="addressGoods.salesConsignorDetail" clearable style="width: 20%">
               </Input>
@@ -99,7 +91,7 @@
               </Button>
             </Form-item>
           </Form>
-        </TabPane>
+        </TabPane> -->
         <!-- Udesk 坐席功能 后续维护 -->
         <!-- <TabPane label="客服设置" name="UDESK">
           <Form
