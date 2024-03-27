@@ -35,11 +35,11 @@ export default {
   data(){
     return {
       legalNavListTitle: [
-        "商品",
+        // "商品",
         // "订单",
         // "财务",
         // "营销",
-        "统计",
+        // "统计",
         "设置",
         "消息",
       ]
