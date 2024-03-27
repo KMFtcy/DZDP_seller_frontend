@@ -34,6 +34,11 @@
                     <Icon size="16" type="md-settings" />
                   </Tooltip>
                 </li> -->
+                <li class="nav-item " @click="returnToMain">
+                  <Tooltip content="主页">
+                    <Icon size="20" type="md-home" />
+                  </Tooltip>
+                </li>
               </ul>
               <Dropdown
                 transfer
@@ -128,6 +133,9 @@ export default {
     },
   },
   methods: {
+    returnToMain(){
+      this.$router.push('/home')
+    },
     handleClickSetting() {
       this.$refs.config.open();
     },
