@@ -32,6 +32,19 @@
 import util from "@/libs/util.js";
 export default {
   name: "shrinkableMenu",
+  data(){
+    return {
+      legalNavListTitle: [
+        "商品",
+        // "订单",
+        // "财务",
+        // "营销",
+        "统计",
+        "设置",
+        "消息",
+      ]
+    }
+  },
   computed: {
 
     // 二级菜单列表
@@ -40,7 +53,9 @@ export default {
     },
     // 一级菜单
     navList() {
-      return this.$store.state.app.navList;
+      let newArr = this.$store.state.app.navList.filter( r => this.legalNavListTitle.indexOf(r.title) > -1 );
+      return newArr;
+      // return  this.$store.state.app.navList
     },
     // 当前一级菜单
     currNav() {
