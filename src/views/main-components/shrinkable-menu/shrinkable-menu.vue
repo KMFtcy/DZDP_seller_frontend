@@ -42,6 +42,14 @@ export default {
         // "统计",
         "设置",
         "消息",
+      ],
+      legalMenuList: [
+        "店铺管理",
+        "系统消息"
+      ],
+      legalMenuItemList: [
+        "店铺设置",
+        "系统消息"
       ]
     }
   },
@@ -49,7 +57,13 @@ export default {
 
     // 二级菜单列表
     menuList() {
-      return this.$store.state.app.menuList;
+      let newArr = this.$store.state.app.menuList.filter( r => this.legalMenuList.indexOf(r.title) > -1 );
+      newArr.forEach((arr) =>{
+        let newChildren = arr.children.filter(r => this.legalMenuItemList.indexOf(r.title) > -1 );
+        arr.children = newChildren
+      });
+      // return this.$store.state.app.menuList
+      return newArr;
     },
     // 一级菜单
     navList() {
