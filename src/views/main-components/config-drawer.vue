@@ -32,6 +32,7 @@ export default {
   computed: {
     ...mapState({
       setting: state => {
+        state.setting.setting.isUseTabsRouter = false
         return state.setting.setting
       }
     })

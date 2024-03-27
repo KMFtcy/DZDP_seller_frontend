@@ -29,11 +29,11 @@
               class="user-dropdown-innercon"
             >
               <ul class="nav-list">
-                <li class="nav-item " @click="handleClickSetting">
+                <!-- <li class="nav-item " @click="handleClickSetting">
                   <Tooltip content="设置">
                     <Icon size="16" type="md-settings" />
                   </Tooltip>
-                </li>
+                </li> -->
               </ul>
               <Dropdown
                 transfer
