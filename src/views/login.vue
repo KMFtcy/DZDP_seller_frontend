@@ -3,8 +3,8 @@
     <Row type="flex" @keydown.enter.native="submitLogin">
       <Col style="width: 368px">
       <Header />
-      <Row style="flex-direction: column">
-        <Tabs v-model="loginType">
+      <Row style="flex-direction: column;">
+        <Tabs v-model="loginType" class="loginTabs">
           <Tab-pane label="账号密码登录" name="passwordLogin">
             <!--账号密码登录-->
             <Form ref="usernameLoginForm" :model="form" :rules="rules" class="form">
@@ -21,8 +21,7 @@
               <a @click="$router.push('forgetPassword')">忘记密码</a>
             </div>
           </Tab-pane>
-          <Tab-pane label="验证码登录" name="mobileLogin">
-            <!-- 验证码登录 -->
+          <!-- <Tab-pane label="验证码登录" name="mobileLogin">
             <Form ref="formSms" :model="formSms" :rules="ruleInline" @click.self='$refs.verify.show = false'>
               <FormItem prop="mobile">
                 <i-input type="text" v-model="formSms.mobile" clearable placeholder="手机号">
@@ -42,7 +41,7 @@
                 </Button>
               </FormItem>
             </Form>
-          </Tab-pane>
+          </Tab-pane> -->
         </Tabs>
         <Row>
           <div class="login-btn" type="primary" size="large" :loading="loading" @click="submitLogin" long>
@@ -298,6 +297,10 @@ export default {
   .login-btn:hover {
     opacity: 0.9;
     border-radius: 10px;
+  }
+
+  .loginTabs{
+    margin-bottom: 15px;
   }
 
 }
