@@ -5,7 +5,11 @@
         <TabPane label="基本信息" name="INFO">
           <Form ref="form" :model="form" :label-width="100" :rules="formValidate">
             <FormItem label="店铺名称">
-              <Input v-model="storeName" disabled clearable style="width: 20%" />
+              <!-- <Input v-model="storeName" disabled clearable style="width: 20%" /> -->
+              <Input v-model="storeName" clearable style="width: 20%" />
+            </FormItem>
+            <FormItem label="联系电话">
+              <Input v-model="phone" clearable style="width: 20%" />
             </FormItem>
             <FormItem label="店铺地址" prop="storeAddressPath">
               <span>{{ form.storeAddressPath }}</span>
@@ -20,14 +24,17 @@
             <FormItem label="店铺简介" prop="content" class="wangEditor">
               <Input type="textarea" :rows="8" v-model="form.storeDesc" style="width: 30%"></Input>
             </FormItem>
-            <FormItem label="店铺楼层" prop="content" class="wangEditor">
+            <FormItem label="营业时间">
+              <Input v-model="businessHour" clearable style="width: 20%" />
+            </FormItem>
+            <!-- <FormItem label="店铺楼层" prop="content" class="wangEditor">
               <i-switch v-model="form.pageShow" @on-change="pageShow"></i-switch>
               <span class="desc">店铺楼层装修是否开启，开启后移动端PC端将会自动展示装修的内容</span>
             </FormItem>
             <FormItem label="开启自提" prop="content" class="wangEditor">
               <i-switch v-model="form.selfPickFlag" @on-change="changeSelfPickFlag"></i-switch>
               <span class="desc">店铺是否开启自提功能</span>
-            </FormItem>
+            </FormItem> -->
             <Form-item>
               <Button @click="handleSubmit" :loading="submitLoading" type="primary" style="margin-right: 5px">修改
               </Button>
@@ -148,7 +155,8 @@ export default {
       type: "INFO",
 
       storeName: "", //店铺名称
-
+      phone: "",
+      businessHour: "",
       regionId: [], // 地区id
       addressForm: {
         // 退货地址
@@ -348,6 +356,8 @@ export default {
           this.form = res.result;
 
           this.storeName = res.result.storeName;
+          this.phone = res.result.phone;
+          this.businessHour = res.result.businessHour;
           this.form.storeCenter = res.result.storeCenter;
           Cookies.set("userInfoSeller", JSON.stringify(res.result));
           //库存预警数赋值
@@ -388,9 +398,10 @@ export default {
     //提交保存
     handleSubmit() {
       this.$refs.form.validate((valid) => {
+        console.log(123)
         if (valid) {
           this.submitLoading = true;
-          API_Shop.saveShopInfo(this.form).then((res) => {
+          API_Shop.dzdpSaveShopInfo(this.form).then((res) => {
             this.submitLoading = false;
             if (res.success) {
               this.$Message.success("修改成功");

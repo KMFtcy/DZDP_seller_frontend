@@ -23,6 +23,10 @@ const service = axios.create({
   timeout: 10000,
   baseURL: baseUrl
 });
+const commonService = axios.create({
+  timeout: 10000,
+  baseURL: commonUrl
+});
 
 const recordCurrentPath = () => {
    return router.history.current.fullPath
@@ -411,3 +415,135 @@ export const postRequestWithNoToken = (url, params) => {
   });
 };
 
+// ------------------
+commonService.interceptors.request.use(
+  config => {
+    if (config.method == "get") {
+      config.params = {
+        _t: Date.parse(new Date()) / 1000,
+        ...config.params
+      };
+    }
+    let uuid = getStore("uuid");
+    if (!uuid) {
+      uuid = uuidv4();
+      setStore('uuid', uuid);
+    }
+
+    config.headers["uuid"] = uuid;
+    return config;
+  },
+  err => {
+    Message.error("请求超时");
+    return Promise.resolve(err);
+  }
+);
+
+// http response 拦截器
+commonService.interceptors.response.use(
+  response => {
+    const data = response.data;
+    // 根据返回的code值来做不同的处理(和后端约定)
+    if (!data.success && data.message) {
+      Message.error(data.message);
+    }
+    switch (data.code) {
+      case 400:
+        if (data.message !== null) {
+          Message.error(data.message);
+        } else {
+          Message.error("系统异常");
+        }
+        break;
+      case 401:
+        // 未登录 清除已登录状态
+        Cookies.set("userInfoSeller", "");
+        setStore("accessToken", "");
+        if (router.history.current.name != "login") {
+          if (data.message !== null) {
+            Message.error(data.message);
+          } else {
+            Message.error("未知错误，请重新登录");
+          }
+          redirectLogin();
+        }
+        break;
+      case 500:
+        // 系统异常
+        if (data.message !== null) {
+          Message.error(data.message);
+        } else {
+          Message.error("系统异常");
+        }
+        break;
+      default:
+        return data;
+    }
+  },
+  async error => {
+    // 返回状态码不为200时候的错误处理
+    if (error.response) {
+      if (error.response.status === 401) {
+        // 这种情况一般调到登录页
+      } else if (error.response.status === 404) {
+        // 避免刷新token报错
+      } else if (error.response.status === 403) {
+        isRefreshToken++;
+        if (isRefreshToken === 1) {
+          const getTokenRes = await refreshToken();
+          if (getTokenRes === "success") {
+            // 刷新token
+            if (isRefreshToken === 1) {
+              error.response.config.headers.accessToken = getStore(
+                "accessToken"
+              );
+              return service(error.response.config);
+            } else {
+              router.go(0);
+            }
+          } else {
+            Cookies.set("userInfoSeller", "");
+            redirectLogin();
+          }
+          isRefreshToken = 0;
+        }
+      } else {
+        // 其他错误处理
+        Message.error(error.response.data.message);
+      }
+    }
+
+    /* router.push("/login") */
+    return Promise.resolve(error);
+  }
+);
+
+export const commonPostRequest = (url, params, headers) => {
+  let accessToken = getStore("accessToken");
+  return commonService({
+    method: "post",
+    url: `${url}`,
+    data: params,
+    transformRequest: headers
+      ? undefined
+      : [
+          function(data) {
+            let ret = "";
+            for (let it in data) {
+              ret +=
+                encodeURIComponent(it) +
+                "=" +
+                encodeURIComponent(data[it]) +
+                "&";
+            }
+            ret = ret.substring(0, ret.length - 1);
+            return ret;
+          }
+        ],
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      accessToken: accessToken,
+      ...headers
+    }
+  });
+};

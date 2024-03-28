@@ -1,5 +1,5 @@
 // 统一请求路径前缀在libs/axios.js中修改
-import {getRequest, postRequest, putRequest, deleteRequest, importRequest, getRequestWithNoToken} from '@/libs/axios';
+import {getRequest, postRequest, putRequest, deleteRequest, importRequest, getRequestWithNoToken, commonPostRequest} from '@/libs/axios';
 
 
 // 获取数据字典
@@ -140,4 +140,7 @@ export const editChecked = (logisticsId,params) => {
   return putRequest(`/other/logistics/${logisticsId}/updateStoreLogistics`,params)
 }
 
-
+//dzdp修改商家信息
+export const dzdpSaveShopInfo = (params) => {
+  return commonPostRequest(`/dzdp/storeExtension/update`, params)
+}
